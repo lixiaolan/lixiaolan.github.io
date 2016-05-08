@@ -6,4 +6,6 @@ categories: jekyll update
 ---
 This is a test of the posting abilities in jekyll. I will build this and see if it appears on my new site.
 
-Check out this link to my [recipe website][http://katyedidskitchen.com]
+Check out this link to my [recipe website][recipe-website]
+
+[recipe-website]: http://katyedidskitchen.com
