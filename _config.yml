@@ -17,3 +17,8 @@ github_username:  lixiaolan
 
 # Build settings
 markdown: kramdown
+
+# Collections
+collections:
+- projects
+
