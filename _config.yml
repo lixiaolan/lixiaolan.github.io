@@ -20,5 +20,6 @@ markdown: kramdown
 
 # Collections
 collections:
-- projects
-
+  projects:
+    output: true
+    permalink: /projects/:path/
