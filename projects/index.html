@@ -4,11 +4,11 @@ title: Projects
 permalink: /projects/
 ---
 <div class="home">
-  <h1 class="page-heading">Projects</h1>
+  <h1 class="page-heading">Leland's Projects</h1>
   <ul>
     {% for project in site.projects %}
       <li>
-        <img src="/images/{{ project.titleImage }}" width="100" /></span><a href="{{ project.url }}"> {{ project.title }} </a>
+        <a href="{{ project.url }}"><img src="/images/{{ project.titleImage }}" width="100" />{{ project.title }}</a>
       </li>
     {% endfor %}
   </ul>
