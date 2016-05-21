@@ -77,6 +77,15 @@ li {
 }
 
 
+/**
+ * Customized class to remove bullets from list
+ */
+.noBullets
+{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
 
 /**
  * Headings

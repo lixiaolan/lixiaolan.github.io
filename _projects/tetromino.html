@@ -4,4 +4,54 @@ title: "Tetromino 19"
 titleImage: "tetromino19.svg"
 sourceUrl: "https://github.com/lixiaolan/Tetromino19"
 ---
-<p>Tetromino 19 is a game, an algorithm, and an art project. Currently all of these share a single sourcefolder folder!</p>
+<p>Tetromino 19 is a game, an algorithm, and an art project. Currently all of these share a single sourcefolder folder! To follow is some background followed by a description of the various parts of the project.</p>
+
+<h2>Background</h2>
+<p>The name "Tetromino 19" comes from the lack of my ability to come up with a better name. A <a href="https://en.wikipedia.org/wiki/Polyomino">polyomino</a> of degree N is a shape created by gluing N squares together to form a shape. When N=4 these are called tetrominos. A simple question is: "For each N, how many of these shapes are there?". As is often the case, there is no simple answer and, in fact, the question is a bit ambiguous. There are at least three notions of what it means for shapes to be "the same". If one allows for the shapes to be rotated (increments of pi/2) and reflected (or "turned over" where it a physical object) there are 5 tetrominos. If only rotation is allowed, there are 7. If no rotation or reflection is allowed there are 19.</p>
+<p>In this project, I currently explore various diversions using the 19 tetromino blocks. What started as a game became and algorithm challenge and somehow morphed into a collaborative art project with my <a href="http://awdience.com/">sister</a>.</p>
+
+<h2>The Game</h2>
+<p>Tetromino 19 started as a question: "What is a fun game one can play with the 19 tetromino blocks?". I began with the familiar concept of dropping blocks into a trough clearing lines. The problem is, without rotation, this game is basically impossible to win. While trying to play it, the play inevitably creates un-filled cavities. So I added one simple rule: If the player creates an unfilled cavity that can be filled with tetromino blocks, the cavity will become filled. This led to a very satisfying game experience. But how, given a cavity, does one quickly determine if it can be filled with tetrominos? This question spawned the "algorithm challenge" part of this project and will be answered later.</p>
+
+<p>For a UI, I kept things simple and used <a href="https://en.wikipedia.org/wiki/Ncurses">Ncurses</a>. The game is playable in the command line using the following steps:</p>
+<ol>
+  <li>Install Ncurses</li>
+  <li>Pull the Tetromino 19 source.</li>
+  <li>Navigate to the source folder and read the README.txt</li>
+</ol>
+<p>If everything works out you can play the game using the command:
+{% highlight bash %}
+./tetromino19
+{% endhighlight %}
+  Here is me attempting the first few blocks:</p>
+<center><img src="/images/tetromino19Gameplay.gif"></img></center>
+<p>Feel free to give the game a try. It's hard at first because most people are used to being able to rotate their tetrominos, but once you get the hang of it, there is (in my opinion) a great depth of strategy involved. Send me your high score!</p>
+  
+<h2>The Algorithm</h2>
+<p>When creating the game, I originally only allowed the player to create cavities with 4 blocks. As it turns out, any cavity of 4 blocks is by definition a tetromino shape. The same is NOT true, however, of cavities of 8 blocks (a small bit of pen and paper experimenting will reveal this). This means the problem of determining if a given cavity can be filled with tetrominos is not as simple as making sure the size of the cavity is a multiple of 4 (so sad).</p>
+<p>Since I wanted to make the game more general and allow any cavity to be auto filled with tetrominos if it is possible to do so, I needed an algorithm to do this. I spent a lot of time trying to reduce the problem of determining if a region is "fill-able" to some easy to compute quantity, but I failed. All I had to work with was that the cavity must be divisible by 4 which is a necessary condition, but not sufficient. My investigations did, however, un-earth some interesting facts. I learned about the <a href="https://en.wikipedia.org/wiki/Conway_criterion">Conway criterion</a> for tiling a surface with a single shape. I also discovered that if the size of a concave cavity is divisible by 4, it appears more likely that you can tile it with tetrominos than with dominoes. Unfortunately, I cannot prove this speculation so I won't elaborate. Suffice it to say that dominoes, though smaller, are less forgiving to tile with than tetrominos!</p>
+<p>Since no clever mathematical invariant reveled itself to me, I decided to implement an algorithm to fill regions with tetrominos. In its simplest form, the algorithm is a sort of recursive depth first search. It is comprised of two recursive functions which I will call "A" and "B". In their most simplistic form, they behave as follows:</p>
+<h3>function A</h3>
+<ol>
+  <li>Given an empty square within the cavity, insert a tetromino block which fills the square.</li>
+  <li>Pass the newly inserted block to function B.</li>
+  <li>If function B returns true, return true.</li>
+  <li>If function B returns false, try the next suitable tetromino block and pass it to function B.</li>
+  <li>If no more suitable tetromino blocks can be selected, return false.</li>
+</ol>
+<h3>function B</h3>
+<ol>
+  <li>Given a tetromino block, find an empty square adjacent to it.</li>
+  <li>Pass this empty square to function A.</li>
+  <li>If function A returns false, return false.</li>
+  <li>If function A returns true, find the next empty square and repeat.</li>
+  <li>If no empty squares are left, return true.</li>
+</ol>
+<p>Once these functions have been defined, testing if a cavity can be filled with tetromino blocks is as "simple" as calling function A on an empty block within the cavity. If the function call returns true, the cavity can be filled, otherwise it cannot. Furthermore, if implemented correctly, the algorithm is constructive.</p>
+
+<p>Alas, if only life were that simple. After implementing functions A and B, I found that the algorithm would often hang even on simple cavities. This was not due to programmer error, but instead because the algorithm often got stuck in stupid ways. Thus started a continuing sequence of refinements. One obvious refinements was to check upon adding a new tetromino that if the cavity should be divided into sub-cavities, that each sub-cavity still had a size divisible by 4. This helped immensely, but was not good enough for all cases. Suffice it to say, the algorithm has increased in complexity and sophistication but is still a work in progress.</p>
+
+<p>Right now, there is one simple API for using the algorithm outside the context of the Tetromino 19 game. The API is subject to change, but currently works by reading a "problem" in as XML and then populating the problem with a solution. Since this is currently in flux, I'll not expand upon it here.</p>
+<h2>The Art Project</h2>
+<p>Armed with an algorithm which can create tetromino tilings of any connected region (provided it is possible), my sister and I decided to collaborate on an art project. My sister, <a href="http://awdience.com/">a graphic designer</a>, comes up with interesting images that can be drawn using tetromino blocks, I am creating them, and she is touching them up. The current plan is to create a series of poster prints based on this concept. To accomplish my end of the deal, I am working on tools to convert an image file to a matching tetromino tiling. I also developed some drawing tools in JavaScript to create SVG images (like the one at the top of the page). This art project is still in an infant stage and I look forward to posting lots of cool images in the future. For now, however, here is prototype example of "Beatrice the Bee" to wet your appetite:</p>
+<center><img src="/images/beatrice.svg" alt="Image of a bee"/></center>
