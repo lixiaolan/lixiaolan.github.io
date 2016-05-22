@@ -1,0 +1,62 @@
+---
+layout: project
+title: "Yasnippet Backsolve"
+titleImage: "emacsLogo.svg"
+sourceUrl: "https://github.com/lixiaolan/yasnippet"
+---
+<p>Yasnippet <a href="https://github.com/joaotavora/yasnippet">is a handy snippet extension</a> for Emacs. I have been using Yasnippet for a couple years and one day I had an idea of how to make Yasnippet a tool for not just entering snippets but doing structured editing. My original intention is that the functionality would be added to the yasnippet project, but currently the project is (instead) an extension of Yasnippet. Here is a summary:</p>
+
+<h2>Idea</h2>
+
+<p>The idea is to add "back solving" capability. This means that text created with a snippet can be re-initialized and re-edited as a snippet. Even text was not created using a snippet can be "back solved". The one new interative function in my branch is "yas-backsolve". It will prompt for snippet key and then search forward for a snippet to re-activate.</p>
+
+<h2>Why?</h2>
+
+<p>A couple examples of the use case where I like to use yas-backsolve in my own work. Suppose I use the c++ snippet with key "fori":</p>
+{% highlight text %}
+for (${1:auto }${2:it} = ${3:var}.begin(); $2 != $3.end(); ++$2) {
+    $0
+}
+{% endhighlight %}
+<p>to create the code</p>
+
+{% highlight C++ %}
+for (auto myIterator = myVector.begin(); myIterator != myVector.end(); ++myIterator) {
+    myValue += *myIterator;
+}
+{% endhighlight %}
+
+<p>and I later want to change the name myIterator to yourIterator and myVector to yourVector. Running yas-backsolve on the the key "fori" re-activates the snippet as if I had just created it (with field names preserved) and I can tab through and edit the names fields and the changes will update in all the mirrors. It does not matter if this for loop code was created using a snippet in the first place. yas-backsolve will still work.</p>
+
+<p>Another place I use yas-backsolve is with the latex snippet with key "begin":</p>
+{% highlight text %}
+\begin{${1:env}}
+  $0
+\end{$1}	
+{% endhighlight %}
+
+<p>Suppose I open a latex file and it looks like</p>
+{% highlight latex %}
+\begin{enumerate}
+  \item thing one
+  \item 
+    \begin{center}
+      thing two
+    \end{center}
+  \item thing three
+\end{enumerate}
+{% endhighlight %}
+
+<p>I can run yas-backsolve with key begin to re-enter the snippet used to create the "enumerate" environment and change it to "itemize". The text in the "begin" and "end" will be updated simultaneously.</p>
+
+<p>Once a person is comfortable using basic yasnippets, yas-backsolve feels very natural since it uses the same UI.</p>
+      
+<h2>How?</h2>
+
+<p>yas-backsolve works by utilizing regular expressions to figure out what text was inserted into the fields of a snippet. Once given a snippet key, yas-backsolve converts the snippet into a regular expression capable of searching for text that looks like it was created using the snippet corresponding to the key. If it finds a match, it extracts text that was entered into the fields of the snippet. Using this information, yas-backsolve initializes the matched text as if it were a snippet begin edited.</p>
+
+<p>yas-backsolve does not store any metadata associated with files. Snippets are not cached in any way. This way I can edit a file I have opened for the first time as if snippets had been used in its creation.</p>
+
+<h2>What Now?</h2>
+
+<p>yas-backsolve has some known limitations. Currently it works only on snippets with simple non-nested mirror fileds. Snippets using lisp expressions in their fields or mirrors will not work properly. yas-backsolve attempts to determine before running if the input snippet is compatible and notifies the user accordingly. Over time, I intend to expand the functionality of yas-backsolve to overcome these limiations.</p>

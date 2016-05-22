@@ -38,6 +38,10 @@ ul, ol, dl, figure,
 }
 
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: "courier";
+}
+
 
 /**
  * Images
@@ -207,9 +211,12 @@ pre {
         width: 16px;
         height: 16px;
         vertical-align: middle;
-
-        path {
-            fill: $grey-color;
-        }
     }
+}
+
+/**
+ * Post container
+ */
+.post-div:hover {
+    background-color: #EEEEEE;
 }

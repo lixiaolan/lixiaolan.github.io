@@ -4,4 +4,15 @@ title: "Katie's Recipe Website"
 titleImage: "taco.svg"
 sourceUrl: "https://github.com/lixiaolan/RecipeWebsite"
 ---
-<p>After building <a href="/projects/httpServer">my own HTTP server</a> I set out to launch a website on top of it. The site (which is actively being used) is a recipe managment app which <a href="http://katyedidskitchen.com/">can be found here</a>. The site was written as a "one page app" in JavaScript.</p>
+<p>After building <a href="/projects/httpServer">my own HTTP server</a> I set out to launch a website on top of it. The site (which is actively being used) is a recipe management app which <a href="http://katyedidskitchen.com/">can be found here</a>. The site was written as a "one page app" in JavaScript + JQuery. The JavaScript uses the Model-View-Controller design paradigm and the functional inheritance pattern (as apposed to prototypical inheritance) for defining objects. For the minimal stilling, I used Bootstrap. The site is currently being hosted on an EC2 micro instance.</p>
+
+<p>The key feature of the site is that it can extract recipes from other recipe websites. The user, once finding a recipe they wish to save, can enter the URL into the recipe site to extract the recipe. This extraction is accomplished on the web server using a collection of data extraction scripts written in Emacs. This logic may eventually be re-written in JavaScript. The following is a list of sites currently supported:</p>
+
+<ul>
+  <li>Yummly</li>
+  <li>The Food Network</li>
+  <li>Better Homes And Gardens</li>
+  <li>All Recipes</li>
+  <li>Real Simple</li>
+  <li>Manjula's Kitchen</li>
+</ul>
