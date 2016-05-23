@@ -189,11 +189,13 @@
     color: $grey-color;
 }
 
-.post-link {
-    display: block;
-    font-size: 24px;
+.post-link:link {
+    color: black;
 }
 
+.post-link:hover {
+    text-decoration: none;
+}
 
 
 /**

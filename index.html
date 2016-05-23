@@ -7,15 +7,17 @@ layout: default
   <h1 class="page-heading">Posts:</h1>
 
   {% for post in site.posts %}
-  <div class="post-div">
-    
-    <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
-    
-    <h2><a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></h2>
-    
-    <p>{{ post.excerpt }}</p>
-    
-  </div>
+  <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">
+    <div class="post-div">
+      
+      <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+      
+      <h2>{{ post.title }}</h2>
+      
+      <p>{{ post.excerpt | strip_html }}</p>
+      
+    </div>
+  </a>
   {% endfor %}
 
   <!-- <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p> -->
