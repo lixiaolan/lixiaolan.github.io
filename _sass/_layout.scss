@@ -209,6 +209,15 @@
     background-color: #EEEEEE;
 }
 
+tr.project-table-row:hover{
+    background-color: #EEEEEE;
+    cursor: pointer;
+}
+
+table.nogap{
+  border-collapse: collapse;
+}
+
 .post-header {
     margin-bottom: $spacing-unit;
 }
