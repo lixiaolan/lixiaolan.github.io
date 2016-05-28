@@ -3,12 +3,11 @@ layout: page
 title: Projects
 permalink: /projects/
 ---
-
 <table style="width:100%">
   {% for project in site.projects %}
   <a class="post-link" href="{{ project.url }}"> 
     <tr class="project-table-row" onclick="location.href='{{ project.url }}'">
-      <td><img src="/images/{{ project.titleImage }}" width="100px" height="100px"/></td>
+      <td style="min-width=100px;"><img src="/images/{{ project.titleImage }}" width="100px" height="100px"/></td>
       <td><font size="6"><a href="{{ project.url }}">{{ project.title }}:</a></font> {{ project.blerb }}</td>
     </tr>
   </a>
