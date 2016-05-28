@@ -209,13 +209,12 @@
     background-color: #EEEEEE;
 }
 
-tr.project-table-row:hover{
+.project-div:hover {
     background-color: #EEEEEE;
-    cursor: pointer;
 }
 
-table.nogap{
-  border-collapse: collapse;
+.project-div {
+    margin-bottom: 10px;
 }
 
 .post-header {

@@ -3,14 +3,27 @@ layout: page
 title: Projects
 permalink: /projects/
 ---
-<table style="width:100%">
+
+<div class="container-fluid">
   {% for project in site.projects %}
-  <a class="post-link" href="{{ project.url }}"> 
-    <tr class="project-table-row" onclick="location.href='{{ project.url }}'">
-      <td><img src="/images/{{ project.titleImage }}" width="100" height="100"/></td>
-      <td><center><font size="6">{{ project.title }}</font></center></td>
-      <td>{{ project.blerb }}</td>
-    </tr>
+  <a class="post-link" href="{{ project.url }}">
+    <div class="row project-div">
+      <div class="col-lg-3 col-md-3 col-xs-3">
+        <center>
+          <img src="/images/{{ project.titleImage }}" width="100" height="100"/>
+        </center>
+      </div>
+      <div class="col-lg-3 col-md-3 col-xs-9">
+        <center>
+          <font size="6">{{ project.title }}</font>
+        </center>
+      </div>
+      <div class="col-lg-6 col-md-6 col-xs-12">
+        <center>
+          {{ project.blerb }}
+        </center>
+      </div>
+    </div>
   </a>
   {% endfor %}
-</table>
+</div>
