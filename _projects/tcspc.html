@@ -1,0 +1,12 @@
+---
+layout: project
+title: "TCSPC"
+titleImage: "photon.svg"
+sourceUrl: "https://github.com/lixiaolan/FCSProject"
+blerb: "A free to use and efficient MATLAB implementation of a Time-Correlated Single-Photon Counting (TCSPC) algorithm."
+---
+<p>During a one summer in graduate school, I worked part time in the chemistry lab run by <a href="http://www.chem.wisc.edu/users/rhg">Randall Goldsmith</a>. One of his projects pertaining to Alzheimer's research required a technique for data analysis called Time-Correlated Single-Photon Counting (TCSPC). The data set retrieved from their experiments consisted of a list of arrival times of single photons emitted from a flourophore under study. That data must be converted into a standard Fluorescence Correlation Spectroscopy (FCS) curve. Commercial software exists which can perform this calculation, but the software is expensive and proprietary. Furthermore, the research on which the software is based is public knowledge. For this reason professor Goldsmith thought, and correctly so, that nothing was preventing someone with programming knowledge and access to the correct research documents from implementing the algorithm in an accessible language such as MATLAB. That is where I came in.</p>
+
+<p>For this project, I did background reading on the science behind the data acquisition as well as TCSPC algorithms in general. I implemented the algorithm and performed various optimization's and innovations to make it work quickly in MATLAB. I devised a way to reduce the number of floating point operations required by means of careful "book-keeping". I also dig into MATLAB's way of rounding floating point numbers to ensure value comparisons performed as desired. Finally, I wrote complete documentation for the script so that it could be easily used by lab members after my departure.</p>
+
+<p>Though a relatively short project, I enjoyed contributing to scientific research outside of the direct mathematics realm. I also enjoyed making a useful tool freely and publicly available for any other lab to use.</p>
