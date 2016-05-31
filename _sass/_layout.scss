@@ -42,6 +42,10 @@
         }
     }
 
+    .page-link-active {
+        background-color: $hover-link-color;
+    }
+
     @include media-query($on-palm) {
         position: absolute;
         top: 9px;
@@ -206,16 +210,17 @@
  * Posts
  */
 .post-div:hover {
-    background-color: #EEEEEE;
+    background-color: $hover-link-color;
+    cursor: pointer;
 }
 
 tr.project-table-row:hover{
-    background-color: #EEEEEE;
+    background-color: $hover-link-color;
     cursor: pointer;
 }
 
 .project-div:hover {
-    background-color: #EEEEEE;
+    background-color: $hover-link-color;
 }
 
 .project-div {
