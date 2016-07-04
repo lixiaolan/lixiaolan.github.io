@@ -1,0 +1,21 @@
+---
+layout: post
+title:  "Thoughts on AWK"
+date:   2016-06-30 17:55:52 -0500
+categories: languages
+---
+<p>In a previous post, I mentioned I wanted to "get to know AWK" better. I have done so, and can safely report that we are becomming friends. I ingested a couple online tutorials (forgoing my usual book purchasing strategy) and found Bruce Barnett's particularly useful (<a href="http://www.grymoire.com/Unix/Awk.html">http://www.grymoire.com/Unix/Awk.html</a>).</p>
+
+<p>AWK specializes in reading and reporting on structured data (think lists and tables). It provides easier tools for accessing structure than bash+grep+sed does. E.g. grabbing the second column in a .csv is a trivial task. There are other scripting languages that can do this but the reason I reccomend AWK is ubiquity. AWK comes along with almost any unix system and so, even if it is not the best possible tool out there, it is always available. That fact alone makes it invaluable.</p>
+
+<p>A few of my favorite things about AWK, in the order I happened to write them down, are:</p>
+
+<ul>
+  <li><b>Associative Arrays: </b>An associative array is an ordered map with string keys and string or integer values. Looping on the keys is easy and is always performed in sorted order.</li>
+  <li><b>Flexible "Record" Definition: </b>sed stubbornly processes the input one line at a time. AWK has a notion of a "Record" which represents a single chunk of structured data. By default, a "Record" is a single line, but this behavior can be customized. Thus if I had a list of addresses comprising of three lines each, I could, with very little fuss, define a "Record" to be three lines of data.</li>
+  <li><b>C Style Syntax: </b>AWK presents more like C than either sed or bash. This drastically reduces the derivative of the learning curve (for me at least).</li>
+  <li><b>Arguments: </b>When calling an AWK script, you can pass arguments. This is not a profound observation but I found this feature nonetheless useful.</li>
+  <li><b>String/Number Duality: </b>Variables in AWK are like subatomic particles in that they can be interpreted in two fundamentally different ways depending on the context. With subatomic particles, I am referring to wave/particle duality. With AWK, I am referring to string/number duality. A variable is a string until it encounters mathematical operations when it behaves, instead, like an number. Thankfully, the rules behind this string/number duality don't conjure up philosophical dilemmas the same way quantum mechanics does...</li>
+</ul>
+
+<p>In summary, I think it rAWKs, but don't take my word for it. Give it a try and see what you think. After all, you probably already have it installed.</p>
