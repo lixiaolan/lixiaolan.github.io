@@ -1,0 +1,79 @@
+---
+layout: post
+title:  "Closures in Javascript vs C++"
+date:   2016-07-08 17:55:52 -0500
+categories: languages
+---
+<p>This is going to be a quick one. A <a href="https://en.wikipedia.org/wiki/Closure_%28computer_programming%29">closure</a> is an environment (collection of variables) associated with a function (callable with the () operator). A closure is usually created when a function is defined and the programming language allows the function definition to include variables in the surrounding scope. But what happens when the surrounding scope goes out of scope? In Javascript, the scope captured in the closure remains valid as long as the function owning the closure is still in some scope (somewhere). C++ does not, however, have garbage collection which changes the behavior somewhat.</p>
+
+<p>To tease out the difference in Javascript and C++ closures, I'll show some examples. First is the Fibonacci sequence function in Javascript:</p>
+
+{% highlight Javascript %}
+var genFibs = function(i, j) {
+    return function () {
+        j = i + j;
+        i = j - i;
+        return j;
+    }
+}
+var fibs = genFibs(1,1);
+{% endhighlight %}
+
+<p>"fibs" is now a function where successive calls to it will output the sequence 2,3,5,8,13,... The same can be done in C++:</p>
+
+{% highlight C++ %}
+#include <functional>
+
+std::function<int ()> genFibs(int i, int j) {
+    return [=] () mutable -> int {j = i + j; i = j - i; return j;};
+}
+
+int main() {
+    std::function<int ()> fibs = genFibs(1,2);
+}
+{% endhighlight %}
+
+<p>But are these two examples really the same? No, and here is why: In the C++ case, we indicated that we wanted to capture variables by copying their value (as indicated by the "[=]" syntax). We also indicated that, once copied, we wished to be able to modify both "i" and "j" by declaring our lambda function "mutable". Thus the function returned copies the input values "i" and "j" into the closure and subsequent calls to the callable "fibs" will modify those copied values. In the Javascript case, the values of "i" and "j" were not copied into the closure but instead a reference to them was. What difference does this make? Here is a strange Javascript example:</p>
+      
+{% highlight Javascript %}
+genInts = function(i) {
+    var ret = [];
+    ret[0] = function() {return i++;};
+    ret[1] = function() {return i++;};
+    return ret;
+};
+var gens = genInts(0);
+console.log(gens[0]());
+console.log(gens[1]());
+{% endhighlight %}
+
+<p>In reading the above, what do you expect to be printed on the console? You might expect to see "0" printed twice. After all you are calling each function only once and each was initialized with "i=0". But since both functions have a reference to the exact same "i", you instead see "0" followed by a "1". If we attempted this in C++ and captured the "i" by reference (using the "[&]" syntax), we would get unpredictable results since, upon returning, the references in our closures would reference memory on the stack which has been freed. Alas, C++ lacks automatic garbage collection.</p>
+      
+<p>But is all lost for C++? Can we accomplish this exquisitely stupid behavior in C++? Yes, of course, one can do anything in C++. Here is one way:</p>
+{% highlight C++ %}
+#include <iostream>
+#include <functional>
+#include <memory>
+#include <vector>
+
+using namespace std;
+
+vector<function<int ()> > genIts(int i) {
+    shared_ptr<int> pi = make_shared<int>(i);
+    vector<function<int ()> > ret;
+    ret.push_back([=] () mutable -> int {return (*pi)++;});
+    ret.push_back([=] () mutable -> int {return (*pi)++;});
+    return ret;
+}
+
+int main() {
+    function<int ()> fibs = genFibs(1,2);
+    vector<function<int ()> > gens = genIts(0);
+    cout << gens[0]() << endl;
+    cout << gens[1]() << endl;
+}
+{% endhighlight %}
+
+<p>The C++ example works because the underlying integer "i" is copied onto the heap instead of the stack. The smart pointer to the integer is copied upon capture, but each copy points to the same spot on the heap. Using smart pointers here makes sure that allocated memory on the heap gets freed when the "gens" object goes out of scope. The above could have been accomplished using "new" instead, but then there would be no way to access the pointer to call delete leading to a memory leak.</p>
+    
+<p>So what's the point? I suppose you want some type of closure on this post? Sadly, a tidy conclusion is out of scope for this post.</p>
