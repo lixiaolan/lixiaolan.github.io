@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Closures in Javascript vs C++"
-date:   2016-07-08 17:55:52 -0500
+date:   2016-07-07 17:55:52 -0500
 categories: languages
 ---
 <p>This is going to be a quick one. A <a href="https://en.wikipedia.org/wiki/Closure_%28computer_programming%29">closure</a> is an environment (collection of variables) associated with a function (callable with the () operator). A closure is usually created when a function is defined and the programming language allows the function definition to include variables in the surrounding scope. But what happens when the surrounding scope goes out of scope? In Javascript, the scope captured in the closure remains valid as long as the function owning the closure is still in some scope (somewhere). C++ does not, however, have garbage collection which changes the behavior somewhat.</p>
@@ -61,8 +61,8 @@ using namespace std;
 vector<function<int ()> > genIts(int i) {
     shared_ptr<int> pi = make_shared<int>(i);
     vector<function<int ()> > ret;
-    ret.push_back([=] () mutable -> int {return (*pi)++;});
-    ret.push_back([=] () mutable -> int {return (*pi)++;});
+    ret.push_back([=] () -> int {return (*pi)++;});
+    ret.push_back([=] () -> int {return (*pi)++;});
     return ret;
 }
 
@@ -74,6 +74,6 @@ int main() {
 }
 {% endhighlight %}
 
-<p>The C++ example works because the underlying integer "i" is copied onto the heap instead of the stack. The smart pointer to the integer is copied upon capture, but each copy points to the same spot on the heap. Using smart pointers here makes sure that allocated memory on the heap gets freed when the "gens" object goes out of scope. The above could have been accomplished using "new" instead, but then there would be no way to access the pointer to call delete leading to a memory leak.</p>
+<p>The C++ example works because the underlying integer "i" is copied onto the heap instead of the stack. The smart pointer to the integer is copied upon capture, but each copy points to the same spot on the heap. Using smart pointers here makes sure that allocated memory on the heap gets freed when the "gens" object goes out of scope. The above could have been accomplished using "new" instead, but then there would be no way to access the pointer to call delete leading to a memory leak. Finally, note that my lambda functions are not required to be mutable since we have no need to modify the smart pointer itself, just the data to which it intelligently points.</p>
     
 <p>So what's the point? I suppose you want some type of closure on this post? Sadly, a tidy conclusion is out of scope for this post.</p>
