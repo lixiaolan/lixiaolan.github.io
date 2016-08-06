@@ -1,0 +1,77 @@
+---
+layout: post
+title:  "AVL Tree Rotation"
+date:   2016-08-02 17:55:52 -0500
+categories: algorithm
+---
+<p>An <a href="https://en.wikipedia.org/wiki/AVL_tree">AVL Tree</a> is the original self balancing binary search tree. An AVL tree is considered to be balanced if the heights between the left and right sub-trees at any node differ by at most one. As such, an AVL tree stores, at each node "i", a "balance factor" which is defined as:</p>
+
+<div class="latex">
+  b_i = \left[\text{Height of right sub-tree}\right] - \left[\text{Height of left sub-tree}\right]
+</div>
+
+<p>As nodes are added and deleted, <a href="https://en.wikipedia.org/wiki/Tree_rotation">rotations</a> are necessary to guarantee that for all nodes <span class="latex">n_i \in \{-1,0,1\}<span>.</p>
+
+<p>When performing rotations, one must know how the balancing factors update for all nodes involved. This is the one tricky part of the AVL tree implementation so I thought I would share my solution. This post doesn't contain a complete implementing of an AVL tree. It contains only the simple mathematics I used to properly handle rotations.</p>
+
+<p>Consider the following diagram which shows a single right rotation.</p>
+
+<center><img src="/images/AVLRightRotation.svg" alt="AVL Right Rotation"/></center>
+
+<p>Only three nodes are shown explicitly with all other nodes within the sub-trees represented abstractly as triangles. Our goal is to determine how the balance factors of the three shown nodes will update during rotation. We start by representing the heights of all the sub-trees in terms of the height of sub-tree a:</p>
+
+<div class="latex">
+  \begin{array}{l}
+  h_a = h_a \\
+  h_b = b_1 + h_a \\
+  h_c = b_2 + 1 + \max(h_a, h_b) \\
+  \end{array}
+</div>
+
+<p>The heights above are the absolute heights of of the sub-trees. AVL Trees work with relative heights, so we offset all the above values by h_a to get:</p>
+
+<div class="latex">
+  \begin{array}{l}
+  \Delta h_a = h_a - h_a = 0 \\
+  \Delta h_b = h_b - h_a = b_1 \\
+  \Delta h_c = h_c - h_a = b_2 + 1 + \max(0, b_1) \\
+  \end{array}
+</div>
+
+<p>Since the <span class="latex">\Delta</span> terms are offset by the same amount, taking differences between them yields the same values as differences between the absolute heights. We can now write down what the new balance values will be for nodes 1 and 2</p>
+
+<div class="latex">
+  \begin{array}{l}
+  b_1^{\text{new}} = 1 + \max(\Delta h_b, \Delta h_c) - \Delta h_a \\
+  b_2^{\text{new}} = \Delta h_c - \Delta h_b
+  \end{array}
+</div>
+
+<p>We now have update formulas for nodes 1 and 2, but we can't forget node 0. If the rotation changes the height of node 0's sub-tree, this will affect the balance factor of node 0. The change, in general, depends on if node 2 is the left or right child of 0 in the initial configuration. In either case, we must record the change in height of the sub-tree. Again, we use the <span class="latex">\Delta</span> heights in place of the absolute heights:</p>
+
+<div class="latex">
+  \begin{array}{lcl}
+  h_1 - h_2 & = & \max(\Delta h_a, 1 + \Delta h_b, 1 + \Delta h_c) \\
+  & & - \max(1 + \Delta h_a, 1 + \Delta h_b, \Delta h_c) \\
+  \end{array}
+</div>
+
+<p>And we are done.</p>
+
+<p>A similar set of formulas may be obtained for the opposite rotation (an exercises I'll leave to the reader (don't you hate that?)). Trying to determine balancing factors updates without having these formulas leads to a monstrous tangle of if statements and cases. With these formulas, however, clean and simple tree rotation code ensues.</p>
+
+<script>
+var kList = document.getElementsByClassName("latex");
+for (var i = 0; i < kList.length; i++)
+{
+    var str = kList[i].textContent || kList[i].innerText || "";
+    kList[i].innerHTML = "";
+    katex.render(str, kList[i]);
+}
+</script>
+<style>
+  div > .latex {
+    border: 1px dashed black;
+    padding: 10px;
+  }
+</style>
