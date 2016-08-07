@@ -56,7 +56,7 @@ categories: algorithm
   \end{array}
 </div>
 
-<p>And we are done.</p>
+<p>And we are mostly done. I say "mostly" because now that the balance of node 0 has been altered, the balance further up the tree could also have been affected so balance resolution is needed all along the path from node zero to the root node of the AVL tree. This resolution, however, is not tricky.</p>
 
 <p>A similar set of formulas may be obtained for the opposite rotation (an exercises I'll leave to the reader (don't you hate that?)). Trying to determine balancing factors updates without having these formulas leads to a monstrous tangle of if statements and cases. With these formulas, however, clean and simple tree rotation code ensues.</p>
 
