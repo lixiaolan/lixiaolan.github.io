@@ -1,0 +1,76 @@
+---
+layout: post
+title:  "My Favorite Emacs Command for 2016"
+date:   2017-01-13 17:55:52 -0500
+categories: emacs
+---
+<h1>The Command</h1>
+{% highlight text %}
+C-u M-|
+{% endhighlight %}
+<p>The command will prompt for a shell command. After pressing return, emacs will take your selected region, pipe it to the bash command, and then replace the region with the output. M-| is bound to the "shell-command-on-region" function. C-u is a "prefix argument" which instructs the function to replace current selected region. For more info type:</p>
+
+{% highlight text %}
+C-h k M-|
+{% endhighlight %}
+
+<p>The real power of this command belongs not to emacs but instead to the shell. With it, your favorite shell commands immediatly become emacs editing options. Here is a short example:</p>
+
+<h1>Example</h1>
+
+<p>Suppose you have some data in the form of a space separated columns representing a table:</p>
+
+{% highlight text %}
+room length width
+bedroom 15 12
+bathroom 10 8
+living-room 20 25
+porch 20 5
+{% endhighlight %}
+
+<p>Suppose I want to modify this data to add a fourth column with the area of each room. AWK is good at this kind of thing so I would select the data rows and do C-u M-| awk '{print $1,$2,$3,$2*$3}'. My table now looks like this:</p>
+
+{% highlight text %}
+room length width area
+bedroom 15 12 180
+bathroom 10 8 80
+living-room 20 25 500
+porch 20 5 100
+{% endhighlight %}
+
+<p>Now suppose I want to format that table as a nice readable table. The bash command "column -t" is good at this kind of thing so I can select all the rows and do C-u M-| column -t. Now I have this:</p>
+
+{% highlight text %}
+room         length  width  area
+bedroom      15      12     180
+bathroom     10      8      80
+living-room  20      25     500
+porch        20      5      100
+{% endhighlight %}
+
+<p>Another common task might be to filter some lines of text. grep is the standard unix tool for this and works well here also. If I want to filter the rows of my table that have a "20" somewhere in them, I can do C-u M-| grep 20. And I now have:</p>
+
+{% highlight text %}
+living-room  20      25     500
+porch        20      5      100
+{% endhighlight %}
+
+<p>Finally (and most importantly) I need a cow to announce my results so I type C-u M-| cowsay -n. The result is:</p>
+
+{% highlight text %}
+ _________________________________
+/ living-room  20      25     500 \
+\ porch        20      5      100 /
+ ---------------------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+{% endhighlight %}
+
+<p>Note: cowsay is my favorite unix command of 2016... and every year before it... and after it.</p>
+
+<h1>Conclusion</h1>
+
+<p>Perhaps it is significance that my current favorite emacs command has very little to do with emacs? That it is my current favorite might have more to do with my increasing familiarity with the shell. Play around with it and see what you think.</p>
